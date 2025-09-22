@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>King's Cut - Barbería Premium</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gold: #d4af37;
+            --secondary-gold: #b8860b;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #1a1a1a;
+            --light-text: #f5f5f5;
+            --accent-red: #8b0000;
+            --accent-blue: #1e3a5f;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--dark-bg);
+            color: var(--light-text);
+            overflow-x: hidden;
+        }
+
+        .smoke-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 0, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(30, 58, 95, 0.1) 0%, transparent 50%);
+            z-index: -2;
+            animation: smokeMove 20s ease-in-out infinite;
+        }
+
+        @keyframes smokeMove {
+            0%, 100% { opacity: 0.3; transform: scale(1) rotate(0deg); }
+            33% { opacity: 0.6; transform: scale(1.1) rotate(120deg); }
+            66% { opacity: 0.4; transform: scale(0.9) rotate(240deg); }
+        }
+
+        .vintage-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.03) 50%, transparent 100%),
+                linear-gradient(0deg, transparent 0%, rgba(212, 175, 55, 0.03) 50%, transparent 100%);
+            background-size: 100px 100px;
+            z-index: -1;
+            animation: vintageShift 15s linear infinite;
+        }
+
+        @keyframes vintageShift {
+            0% { background-position: 0 0, 0 0; }
+            100% { background-position: 100px 0, 0 100px; }
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--darker-bg) 0%, rgba(26, 26, 26, 0.95) 100%);
+            backdrop-filter: blur(15px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid var(--primary-gold);
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-gold);
+            text-shadow: 
+                0 0 10px var(--primary-gold),
+                0 0 20px var(--primary-gold),
+                0 0 30px var(--primary-gold);
+            animation: logoGlow 3s ease-in-out infinite alternate;
+            letter-spacing: 2px;
+        }
+
+        @keyframes logoGlow {
+            from { 
+                text-shadow: 
+                    0 0 10px var(--primary-gold),
+                    0 0 20px var(--primary-gold),
+                    0 0 30px var(--primary-gold);
+            }
+            to { 
+                text-shadow: 
+                    0 0 20px var(--primary-gold),
+                    0 0 30px var(--primary-gold),
+                    0 0 40px var(--primary-gold);
+            }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--light-text);
+            font-weight: bold;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+            transition: left 0.8s;
+        }
+
+        nav a:hover::before {
+            left: 100%;
+        }
+
+        nav a:hover {
+            border-color: var(--primary-gold);
+            color: var(--primary-gold);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        main {
+            margin-top: 80px;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6));
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(45deg, 
+                    transparent, 
+                    transparent 2px, 
+                    rgba(212, 175, 55, 0.1) 2px, 
+                    rgba(212, 175, 55, 0.1) 4px);
+            animation: diagonalMove 10s linear infinite;
+        }
+
+        @keyframes diagonalMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-content h1 {
+            font-size: 4.5rem;
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            text-shadow: 
+                2px 2px 4px rgba(0,0,0,0.8),
+                0 0 20px var(--primary-gold);
+            animation: titleSlide 1.5s ease-out;
+            letter-spacing: 3px;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.8rem;
+            color: var(--light-text);
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            animation: subtitleFade 1.5s ease-out 0.5s both;
+            font-style: italic;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: rgba(245, 245, 245, 0.8);
+            margin-bottom: 3rem;
+            animation: textFade 1.5s ease-out 1s both;
+        }
+
+        @keyframes titleSlide {
+            from { 
+                transform: translateX(-100px); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateX(0); 
+                opacity: 1; 
+            }
+        }
+
+        @keyframes subtitleFade {
+            from { 
+                transform: translateY(30px); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateY(0); 
+                opacity: 1; 
+            }
+        }
+
+        @keyframes textFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: buttonsFade 1.5s ease-out 1.3s both;
+        }
+
+        .btn {
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 0;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold));
+            color: var(--dark-bg);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, var(--accent-red), #a52a2a);
+            color: var(--light-text);
+            box-shadow: 0 5px 20px rgba(139, 0, 0, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        @keyframes buttonsFade {
+            from { 
+                transform: translateY(50px); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateY(0); 
+                opacity: 1; 
+            }
+        }
+
+        .services {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+            position: relative;
+        }
+
+        .services::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--primary-gold), 
+                var(--accent-red), 
+                var(--primary-gold), 
+                transparent);
+            animation: lineGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes lineGlow {
+            from { opacity: 0.5; }
+            to { opacity: 1; }
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3.5rem;
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px var(--primary-gold);
+            position: relative;
+            letter-spacing: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.3rem;
+            color: rgba(245, 245, 245, 0.7);
+            margin-bottom: 4rem;
+            font-style: italic;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, 
+                rgba(26, 26, 26, 0.9) 0%, 
+                rgba(10, 10, 10, 0.9) 100%);
+            padding: 2.5rem;
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, var(--primary-gold), transparent, var(--accent-red)) 1;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, var(--primary-gold), transparent);
+            animation: rotate 4s linear infinite;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .service-card:hover::before {
+            opacity: 0.1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px) rotateX(10deg);
+            box-shadow: 
+                0 20px 50px rgba(0,0,0,0.8),
+                0 0 30px rgba(212, 175, 55, 0.3);
+            border-image: linear-gradient(45deg, var(--primary-gold), var(--accent-red)) 1;
+        }
+
+        .service-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-gold);
+            animation: iconBounce 2s ease-in-out infinite;
+            text-shadow: 0 0 20px var(--primary-gold);
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0) rotateY(0deg); }
+            25% { transform: translateY(-10px) rotateY(90deg); }
+            50% { transform: translateY(-5px) rotateY(180deg); }
+            75% { transform: translateY(-10px) rotateY(270deg); }
+        }
+
+        .service-card h3 {
+            color: var(--light-text);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .service-card p {
+            color: rgba(245, 245, 245, 0.8);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .price-tag {
+            background: linear-gradient(45deg, var(--accent-red), #a52a2a);
+            color: var(--light-text);
+            padding: 0.8rem 1.5rem;
+            font-weight: bold;
+            display: inline-block;
+            clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: priceGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes priceGlow {
+            from { box-shadow: 0 0 10px rgba(139, 0, 0, 0.5); }
+            to { box-shadow: 0 0 25px rgba(139, 0, 0, 0.8); }
+        }
+
+        .about {
+            padding: 5rem 0;
+            background: var(--dark-bg);
+            text-align: center;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem;
+            background: linear-gradient(135deg, 
+                rgba(26, 26, 26, 0.8) 0%, 
+                rgba(10, 10, 10, 0.8) 100%);
+            border: 3px solid var(--primary-gold);
+            position: relative;
+            clip-path: polygon(30px 0%, 100% 0%, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0% 100%, 0% 30px);
+        }
+
+        .about-content::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px solid var(--accent-red);
+            clip-path: polygon(25px 0%, 100% 0%, 100% calc(100% - 25px), calc(100% - 25px) 100%, 0% 100%, 0% 25px);
+        }
+
+        .about h2 {
+            color: var(--primary-gold);
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 15px var(--primary-gold);
+            letter-spacing: 2px;
+        }
+
+        .about p {
+            color: var(--light-text);
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: rgba(26, 26, 26, 0.5);
+            border: 1px solid var(--primary-gold);
+            transition: all 0.3s ease;
+            clip-path: polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px);
+        }
+
+        .feature:hover {
+            transform: scale(1.05);
+            background: rgba(212, 175, 55, 0.1);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-gold);
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) rotateZ(0deg); }
+            50% { transform: translateY(-10px) rotateZ(5deg); }
+        }
+
+        .contact {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-card {
+            background: linear-gradient(135deg, 
+                rgba(26, 26, 26, 0.9) 0%, 
+                rgba(10, 10, 10, 0.9) 100%);
+            padding: 2.5rem;
+            text-align: center;
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, var(--primary-gold), var(--accent-red)) 1;
+            transition: all 0.4s ease;
+            position: relative;
+            clip-path: polygon(20px 0%, 100% 0%, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0% 100%, 0% 20px);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            border-image: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold)) 1;
+        }
+
+        .contact-card h3 {
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-card p {
+            color: var(--light-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-red);
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        footer {
+            background: var(--darker-bg);
+            color: var(--light-text);
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 3px solid var(--primary-gold);
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold));
+            clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            animation: scrollBounce 2s infinite;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.5);
+        }
+
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 3rem; }
+            .hero-content .subtitle { font-size: 1.4rem; }
+            .services-grid { grid-template-columns: 1fr; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .header-content { flex-direction: column; gap: 1rem; }
+            nav ul { flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="smoke-bg"></div>
+    <div class="vintage-lines"></div>
+
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">👑 KING'S CUT</div>
+                <nav>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#servicios">Servicios</a></li>
+                        <li><a href="#nosotros">Nosotros</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="inicio">
+            <div class="hero-content">
+                <h1>KING'S CUT</h1>
+                <div class="subtitle">Barbería de Élite</div>
+                <p>Donde el estilo clásico se encuentra con la excelencia moderna</p>
+                <div class="cta-buttons">
+                    <a href="#servicios" class="btn btn-primary">Ver Servicios</a>
+                    <a href="#contacto" class="btn btn-secondary">Reservar Cita</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="services" id="servicios">
+            <div class="container">
+                <h2 class="section-title">SERVICIOS PREMIUM</h2>
+                <div class="section-subtitle">Crafted for the Modern Gentleman</div>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon">✂️</div>
+                        <h3>Corte Clásico</h3>
+                        <p>Corte tradicional con técnicas modernas. Incluye lavado, corte personalizado, peinado y acabado con navaja para un look impecable.</p>
+                        <div class="price-tag">$18.000</div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">🪒</div>
+                        <h3>Afeitado Real</h3>
+                        <p>Afeitado clásico con navaja tradicional, toallas calientes, aceites premium y bálsamos aftershave. Una experiencia de lujo total.</p>
+                        <div class="price-tag">$25.000</div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">🎩</div>
+                        <h3>The Gentleman</h3>
+                        <p>Servicio completo: corte + afeitado + arreglo de barba + tratamiento facial. La experiencia definitiva del caballero moderno.</p>
+                        <div class="price-tag">$35.000</div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">🧔</div>
+                        <h3>Barba Profesional</h3>
+                        <p>Diseño y mantenimiento de barba con recorte preciso, perfilado y tratamientos hidratantes para lucir siempre impecable.</p>
+                        <div class="price-tag">$15.000</div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">💼</div>
+                        <h3>Corporate Look</h3>
+                        <p>Corte ejecutivo diseñado para el hombre de negocios. Estilo profesional con acabado perfecto para cualquier ocasión formal.</p>
+                        <div class="price-tag">$22.000</div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">🏆</div>
+                        <h3>VIP Experience</h3>
+                        <p>Servicio premium con whisky de cortesía, masaje capilar, tratamientos exclusivos y atención personalizada de nuestro master barber.</p>
+                        <div class="price-tag">$50.000</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about" id="nosotros">
+            <div class="container">
+                <div class="about-content">
+                    <h2>TRADICIÓN & EXCELENCIA</h2>
+                    <p>Desde 1985, King's Cut ha sido sinónimo de calidad y distinción en el arte de la barbería. Combinamos técnicas tradicionales con las últimas tendencias para ofrecer una experiencia única.</p>
+                    <p>Nuestro equipo de barberos certificados se especializa en crear looks únicos que reflejan la personalidad y estilo de cada cliente, manteniendo siempre los más altos estándares de calidad.</p>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <div class="feature-icon">👨‍💼</div>
+                            <h4>Master Barbers</h4>
+                            <p>Profesionales certificados</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🏅</div>
+                            <h4>38 Años</h4>
+                            <p>De tradición y excelencia</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🥃</div>
+                            <h4>Ambiente Premium</h4>
+                            <p>Experiencia de lujo</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">⭐</div>
+                            <h4>Satisfacción</h4>
+                            <p>Garantía del 100%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="contacto">
+            <div class="container">
+                <h2 class="section-title">CONTACTO</h2>
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <div class="contact-icon">📱</div>
+                        <h3>WhatsApp</h3>
+                        <p>+54 9 11 3456-7890</p>
+                        <p>Reservas inmediatas</p>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">🏪</div>
+                        <h3>Ubicación</h3>
+                        <p>Av. Córdoba 1845</p>
+                        <p>Recoleta, CABA</p>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">⏰</div>
+                        <h3>Horarios</h3>
+                        <p>
